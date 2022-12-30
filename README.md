@@ -39,10 +39,10 @@ $ ./dump1090 --write-json public_html/data >> log.txt
 
 お好みのウェブブラウザで[http://[::]:8090/](http://[::]:8090/)を表示します。
 
-### Install pymavlink
+### Install python modules
 
 ```Shell
-$ pip3 install pymavlink
+$ pip3 install pymavlink tzlocal
 ```
 
 ## 使い方
