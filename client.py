@@ -50,6 +50,12 @@ async def cycle_recv(mav):
         pass
     elif msg.get_type() == 'HEARTBEAT':
         print(f'(system {msg.get_srcSystem()} component {msg.get_srcComponent()}) {msg.get_type()}')
+    elif msg.get_type() == 'MESSAGE_INTERVAL':
+        dict = msg.to_dict()
+        print(f'(system {msg.get_srcSystem()} component {msg.get_srcComponent()}) {msg.get_type()} message_id={dict["message_id"]} interval_us={dict["interval_us"]}')
+    elif msg.get_type() == 'UAVIONIX_ADSB_TRANSCEIVER_HEALTH_REPORT':
+        dict = msg.to_dict()
+        print(f'(system {msg.get_srcSystem()} component {msg.get_srcComponent()}) {msg.get_type()} rfHealth={dict["rfHealth"]}')
     elif msg.get_type() == 'ADSB_VEHICLE':
         print(f'(system {msg.get_srcSystem()} component {msg.get_srcComponent()}) {msg.get_type()}', end=' ')
 
@@ -59,7 +65,7 @@ async def cycle_recv(mav):
         print(f'{dict["tslc"]:2}s', end=' ')
         if not flags & mavutil.mavlink.ADSB_FLAGS_VALID_CALLSIGN:
             print(f'{Color.MAGENTA}', end='')
-        print(f'CS:{dict["callsign"]}', end=' ')
+        print(f'CS:{dict["callsign"]: <8}', end=' ')
         print(f'{Color.RESET}', end='')
         if not flags & mavutil.mavlink.ADSB_FLAGS_VALID_ALTITUDE:
             print(f'{Color.MAGENTA}', end='')
