@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import asyncio
+import argparse
 from pymavlink import mavutil
 
 # export MAVLINK20=1
@@ -111,10 +112,18 @@ async def main(mav):
         await asyncio.sleep(0.01)
 
 if __name__ == "__main__":
-    # device = 'tcp:localhost:5763' # Ardupilot Simulatorから受信
-    device = 'udpin:localhost:14550' # PX4 Simulatorから受信
+    parser = argparse.ArgumentParser(description='Parse command line options.')
+    parser.add_argument('-d', '--device', type=str, default='udpin:localhost:14550', help='device name. (ex. "udpin:localhost:14550", "tcp:localhost:5763", "/dev/tty.usbserial-0001")')
+    parser.add_argument('-b', '--baud', type=int, default=57600, help='baudrate. default=57600')
+    args = parser.parse_args()
 
-    mav = mavutil.mavlink_connection(device, source_system=255, source_component=1)
+    # device = 'tcp:localhost:5763' # Ardupilot Simulatorから受信
+    # device = 'udpin:localhost:14550' # PX4 Simulatorから受信
+    # device = '/dev/tty.usbserial-0001'
+    device = args.device
+    baud = args.baud
+
+    mav = mavutil.mavlink_connection(device, baud=baud, source_system=255, source_component=1)
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
